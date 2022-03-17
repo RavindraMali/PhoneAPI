@@ -1,5 +1,5 @@
 class PhoneController < ApplicationController
-
+    skip_before_action :verify_authenticity_token
     def index
         @listPhoneNumber = AllocatedPhoneNumber.all
         if @listPhoneNumber.present?
@@ -12,5 +12,35 @@ class PhoneController < ApplicationController
     end
 
     def create
+        phone_number = params[:phone_number]
+        if phone_number.present?
+            phone_number = phone_number.gsub('/-/',"")
+            check_existance = AllocatedPhoneNumber.where(PhoneNumber: phone_number)
+            if check_existance.present?
+                random_number = AllocatedPhoneNumber.get_random_number
+                result = AllocatedPhoneNumber.create(PhoneNumber: random_number)
+                render json:{success: true, message: "Sorry #{phone_number} is not available,  New phone number allocated Successfully.", phone_number: result.PhoneNumber}, status: 200
+            else
+                result = AllocatedPhoneNumber.new({PhoneNumber: phone_number})
+                if result.save
+                    str =  result.PhoneNumber;
+                    [4, 7].each { |i| str.insert i, '-' }
+                  render json: {success: true, message: "The special number is allocated", phone_number: str}, status: 200
+                else
+                  render json: {success: false, error: result.errors}, status: 500 
+                end
+            end
+        else
+            random_number = AllocatedPhoneNumber.get_random_number
+            result = AllocatedPhoneNumber.create(PhoneNumber: random_number)
+            str =  result.PhoneNumber;
+                  [4, 7].each { |i| str.insert i, '-' } 
+            render json:{success: true, message: "New phone number allocated Successfully.", phone_number: str}, status: 200
+        end
+        
+    end
+
+    def phone_params
+        params.require(:phone).permit(:phone_number)
     end
 end
