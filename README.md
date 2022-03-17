@@ -6,7 +6,10 @@ This application is on rails version
 
 ```bash
     $ rails -v
-    Rails 7.0.2.3
+```
+Rails 7.0.2.3
+
+```bash
     $ rails new PhoneAPI -d postgresql
 ```
 -d flag will indicate rails to create default postgreSql configuration into database.yml file.
@@ -77,5 +80,5 @@ Open routes.rb file located at /app/config/routes.rb and add resource route for 
  ```rails
     resources: phone, :only => [:index, :create]
 ```
-## now create your own logic to implement requruirement.
+### now create your own logic to implement requirement.
 
