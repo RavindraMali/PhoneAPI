@@ -1,0 +1,2 @@
+class AllocatedPhoneNumber < ApplicationRecord
+end
