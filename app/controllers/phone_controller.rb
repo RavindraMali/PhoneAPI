@@ -12,7 +12,7 @@ class PhoneController < ApplicationController
     end
 
     def create
-        phone_number = params[:phone_number]
+        phone_number = params[:PhoneNumber]
         if phone_number.present?
             phone_number = phone_number.gsub('/-/',"")
             check_existance = AllocatedPhoneNumber.where(PhoneNumber: phone_number)
@@ -41,6 +41,6 @@ class PhoneController < ApplicationController
     end
 
     def phone_params
-        params.require(:phone).permit(:phone_number)
+        params.require(:phone).permit(:PhoneNumber)
     end
 end
